@@ -1,0 +1,3 @@
+flask
+marko 
+google-generativeai
