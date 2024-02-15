@@ -1,3 +1,4 @@
 flask
 marko 
 google-cloud-aiplatform
+google-cloud-storage

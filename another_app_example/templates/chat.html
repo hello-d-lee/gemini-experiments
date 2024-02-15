@@ -13,7 +13,7 @@
           maxFilesize: 2, 
       });
 
-      dropzone.on("response", function(file, serverResponse) {
+      dropzone.on("success", function(file, serverResponse) {
         // Clear old response
         document.getElementById("response-area").innerHTML = "";
 

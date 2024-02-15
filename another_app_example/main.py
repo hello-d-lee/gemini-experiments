@@ -29,30 +29,31 @@ model = GenerativeModel(model_name="gemini-pro-vision",
 GCS_BUCKET_NAME = 'gemini-images-uploaded'  
 storage_client = storage.Client()
 
-def upload_to_gcs(file, filename):
+def upload_to_gcs(temp_file, original_filename):  # Keep the filename parameter 
     bucket = storage_client.bucket(GCS_BUCKET_NAME)
-    blob = bucket.blob(filename)  
-    blob.upload_from_filename(file.filename)  # Work directly from 'file'
+    
+    blob = bucket.blob(original_filename)
+    blob.chunk_size = 1024 * 1024
+    blob.upload_from_file(temp_file)
+    
+    print(f"Image uploaded successfully to gs://{GCS_BUCKET_NAME}/{original_filename}")
 
-@app.route('/')
+@app.route('/', methods=['GET','POST'])
 def index():
     return render_template('chat.html')
 
-@app.route('/upload_image', methods=['POST'])
+@app.route('/upload_image', methods=['GET','POST'])
 def upload_image():           
         if 'file' not in request.files:
             return('No file part')
-        
+    
         file = request.files['file']
-        file_bytes = file.read() 
 
-        # Upload to GCS using original filename
-        upload_to_gcs(file, file.filename)  
-        print("uploaded file to GCS")
+        upload_to_gcs(file, file.filename)
 
         # Construct GCS URI (using the original filename now)
-        gcs_uri = "gs://gemini-images-uploaded/coke.jpeg"
-
+        gcs_uri = f"gs://{GCS_BUCKET_NAME}/{file.filename}"
+        
         # Prepare parts for Gemini 
         image = Part.from_uri(gcs_uri, mime_type="image/jpeg")
         print("created image part")
@@ -64,10 +65,15 @@ def upload_image():
             
             You should only return the JSON object and nothing else."""
         contents = [image, prompt]
-        responses = model.generate_content(contents, stream=True)
-        print("generated model response")
+        responses = model.generate_content(contents, stream=True)  
+        print("generated model response") 
+        full_response_text = ''  # Accumulate full output
+
+        for chunk in responses:  # Iterate over generated chunks
+            full_response_text += chunk.text  
+
         return jsonify({
-            "response": marko.convert(responses.text)
+            "response": marko.convert(full_response_text)  # Use aggregated text 
         })
         
 if __name__ == '__main__':
