@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, g, render_template, jsonify
 import marko
 from vertexai.preview.generative_models import GenerativeModel, Part, Image
-from IPython.display import Markdown
+# from IPython.display import Markdown
 import textwrap
 import tempfile
 from google.cloud import storage 
@@ -19,9 +19,9 @@ config = {
   'max_output_tokens': 500
 }
 
-def to_markdown(text):
-  text = text.replace('•', '  *')
-  return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
+# def to_markdown(text):
+#   text = text.replace('•', '  *')
+#   return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
 
 model = GenerativeModel(model_name="gemini-pro-vision",
                               generation_config=config)
@@ -34,9 +34,9 @@ def upload_to_gcs(file, filename):
     blob = bucket.blob(filename)  
     blob.upload_from_filename(file.filename)  # Work directly from 'file'
 
-@app.route('/')
-def index():
-    return render_template('chat.html')
+# @app.route('/')
+# def index():
+#     return render_template('chat.html')
 
 @app.route('/upload_image', methods=['POST'])
 def upload_image():           
