@@ -1,12 +1,16 @@
 import os
-from flask import Flask, request, Response, g, render_template, jsonify
+from flask import Flask, request, g, render_template, jsonify
 import marko
-from vertexai.preview.generative_models import GenerativeModel, Part
-import base64
+from vertexai.preview.generative_models import GenerativeModel, Part, Image
+from IPython.display import Markdown
+import textwrap
+import tempfile
+from google.cloud import storage 
 
 
 app = Flask(__name__)
 app.debug = True
+app.config['UPLOAD_FOLDER'] = "/images/"
 
 config = {
   'temperature': 0,
@@ -15,42 +19,55 @@ config = {
   'max_output_tokens': 500
 }
 
+def to_markdown(text):
+  text = text.replace('•', '  *')
+  return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
+
 model = GenerativeModel(model_name="gemini-pro-vision",
                               generation_config=config)
 
-@app.route('/', methods=['GET'])
-def hello_world():
-    return render_template("chat.html")
+GCS_BUCKET_NAME = 'gemini-images-uploaded'  
+storage_client = storage.Client()
 
-@app.route('/chat', methods=['POST'])
-def chat():
-    if 'user_image' not in request.files:
-        return jsonify({"error": "No file part"})
+def upload_to_gcs(file, filename):
+    bucket = storage_client.bucket(GCS_BUCKET_NAME)
+    blob = bucket.blob(filename)  
+    blob.upload_from_filename(file.filename)  # Work directly from 'file'
 
-    file = request.files['user_image']
+@app.route('/')
+def index():
+    return render_template('chat.html')
 
-    if file.filename == '':
-        return jsonify({"error": "No selected file"})
+@app.route('/upload_image', methods=['POST'])
+def upload_image():           
+        if 'file' not in request.files:
+            return('No file part')
+        
+        file = request.files['file']
+        file_bytes = file.read() 
 
-    if file:
-        image_data = file.read()
-        image_parts = [
-            {
-                "mime_type": file.content_type,
-                "data": image_data
-            },
-        ]
+        # Upload to GCS using original filename
+        upload_to_gcs(file, file.filename)  
+        print("uploaded file to GCS")
 
-        prompt_parts = [
-            "You are Sheldon Cooper. User will upload an image. Based on the image, you have to come up with a Sheldon Cooper style fun fact. Also give a funny, sarcastic note about the image. \n\nUser's image:\n\n",
-            image_parts[0],
-            "\n\nFun fact:\n",
-        ]    
+        # Construct GCS URI (using the original filename now)
+        gcs_uri = "gs://gemini-images-uploaded/coke.jpeg"
 
-        response = model.generate_content(prompt_parts)
-
+        # Prepare parts for Gemini 
+        image = Part.from_uri(gcs_uri, mime_type="image/jpeg")
+        print("created image part")
+        prompt = """You need to analyze an input image which will show a person with a can of coke. 
+            User will upload an image. Based on the image, identify the type of coke can (e.g. Coke Regular, Coke Zero and Diet Coke) and the emotion of the person in the picture. 
+            The response should take the form of a JSON object with the following structure: 
+            
+            {"product": "Diet Coke", "emotion": "Happiness"}
+            
+            You should only return the JSON object and nothing else."""
+        contents = [image, prompt]
+        responses = model.generate_content(contents, stream=True)
+        print("generated model response")
         return jsonify({
-            "response": marko.convert(response.text)
+            "response": marko.convert(responses.text)
         })
         
 if __name__ == '__main__':
