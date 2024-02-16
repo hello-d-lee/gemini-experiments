@@ -68,7 +68,7 @@
         });
 
         if (response.ok) {
-            const responseText = await response.json();
+            const responseJSON = await response.json();
             resultsDiv.textContent = responseJSON; // Display the result
         } else {
             resultsDiv.textContent = 'An error occurred while uploading the image.';
