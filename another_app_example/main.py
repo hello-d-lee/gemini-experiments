@@ -72,7 +72,6 @@ def upload_image():
         )
         print("generated model response") 
         print(responses.text)
-        formatted = json.loads(response.text)
         print(formatted)
         # print(responses)
         # hardcoded_response = {
