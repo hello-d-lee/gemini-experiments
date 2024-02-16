@@ -3,20 +3,6 @@
 <head>
   <title>Image Upload Test</title>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='chat.css') }}">
-  <script>
-    javascript
-    const fileInput = document.getElementById('fileInput');
-    const selectedFileNameDisplay = document.getElementById('selectedFileName');
-
-    fileInput.addEventListener('change', (event) => {
-      const selectedFile = event.target.files[0]; // Get the selected file
-      if (selectedFile) {
-        selectedFileNameDisplay.textContent = selectedFile.name;  // Display name
-      } else {
-        selectedFileNameDisplay.textContent = ''; // Clear when no file selected
-      }
-    });
- </script>
 </head>
 <body>
 
@@ -25,10 +11,10 @@
   <div class="drag-image">
     <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
     <h6><label for="fileInput" class="custom-file-button">Choose your Coke Selfie</label></h6>
+    <span id="fileNameDisplay"></span> 
 
     <form method="post" enctype="multipart/form-data" action="https://vision-coke-backend-ztskssd4ra-uc.a.run.app/upload_image">
       <input type="file" name="file" id="fileInput" style="display: none;">
-      <span id="selectedFileName"></span>
       <br/>
       <button type="submit">How to Do I Feel About My Coke</button>
     </form>
@@ -39,6 +25,18 @@
   <footer>
     <p>Powered by Gemini Vison Pro</p>
   </footer>
+
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+    fileInput.addEventListener('change', (event) => {
+      const selectedFile = event.target.files[0];
+      fileNameDisplay.textContent = selectedFile.name;
+    });
+</script>
+
 
 </body>
 </html>

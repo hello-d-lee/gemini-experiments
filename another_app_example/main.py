@@ -27,6 +27,7 @@ model = GenerativeModel(model_name="gemini-pro-vision",
                               generation_config=config)
 
 GCS_BUCKET_NAME = os.environ['BUCKET_NAME'] 
+
 storage_client = storage.Client()
 
 image_coke_regular_uri = "gs://{GCS_BUCKET_NAME}/Selfie_India_7.png"
