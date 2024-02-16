@@ -75,6 +75,7 @@
 
             const responseData = await response.json();
             console.log(responseData);
+            const tempDiv = document.createElement('div');
             tempDiv.innerHTML = responseData.response; // Assuming 'responseData' holds your whole response
             const preElement = tempDiv.querySelector('pre'); 
             const codeElement = preElement.querySelector('code'); 
