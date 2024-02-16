@@ -30,12 +30,25 @@
   <script>
     const fileInput = document.getElementById('fileInput');
     const fileNameDisplay = document.getElementById('fileNameDisplay');
-
-    fileNameDisplay.textContent = "No file selected"; 
+    const submitButton = document.getElementById('submitButton');
+    
+    // default message
+    // fileNameDisplay.textContent = "No file selected"; 
 
     fileInput.addEventListener('change', (event) => {
       const selectedFile = event.target.files[0];
       fileNameDisplay.textContent = selectedFile.name;
+    });
+
+    // Initially disable the submit button
+    submitButton.disabled = true; 
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+        submitButton.disabled = false; // Enable if a file is selected
+      } else {
+        submitButton.disabled = true;  // Disable if no file is selected
+      }
     });
 </script>
 
