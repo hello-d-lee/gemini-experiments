@@ -72,12 +72,13 @@ def upload_image():
         )
         print("generated model response") 
         print(responses.text)
-        print(responses)
-        hardcoded_response = {
-        "coke_type": "Diet Coke",
-        "emotion": "sad"
-        }
-        return jsonify(hardcoded_response)
+        # print(responses)
+        # hardcoded_response = {
+        # "coke_type": "Diet Coke",
+        # "emotion": "sad"
+        # }
+        #return jsonify(hardcoded_response)
+        return jsonify({marko.convert(responses.text)})
         
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
