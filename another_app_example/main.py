@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, g, render_template, jsonify
 import marko
 from vertexai.preview.generative_models import GenerativeModel, Part, Image
-from IPython.display import Markdown
+# from IPython.display import Markdown
 import textwrap
 import tempfile
 from google.cloud import storage 
@@ -19,19 +19,19 @@ config = {
   'max_output_tokens': 500
 }
 
-def to_markdown(text):
-  text = text.replace('•', '  *')
-  return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
+# def to_markdown(text):
+#   text = text.replace('•', '  *')
+#   return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
 
 model = GenerativeModel(model_name="gemini-pro-vision",
                               generation_config=config)
 
-GCS_BUCKET_NAME = 'gemini-images-uploaded'  
+GCS_BUCKET_NAME = os.environ['BUCKET_NAME'] 
 storage_client = storage.Client()
 
-image_coke_regular_uri = "gs://gemini-images-uploaded/Selfie_India_7.png"
-image_coke_zero_uri = "gs://gemini-images-uploaded/Selfie_India_16.png"
-image_coke_diet_uri = "gs://gemini-images-uploaded/Selfie_David.JPG"
+image_coke_regular_uri = "gs://{GCS_BUCKET_NAME}/Selfie_India_7.png"
+image_coke_zero_uri = "gs://{GCS_BUCKET_NAME}/Selfie_India_16.png"
+image_coke_diet_uri = "gs://{GCS_BUCKET_NAME}/Selfie_David.JPG"
 image_coke_regular = Part.from_uri(image_coke_regular_uri, mime_type="image/png")
 image_coke_zero = Part.from_uri(image_coke_zero_uri, mime_type="image/png")
 image_coke_diet = Part.from_uri(image_coke_diet_uri, mime_type="image/jpeg")
