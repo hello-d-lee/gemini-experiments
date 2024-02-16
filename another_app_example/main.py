@@ -78,7 +78,9 @@ def upload_image():
         # "emotion": "sad"
         # }
         #return jsonify(hardcoded_response)
-        return jsonify({marko.convert(responses.text)})
+        return jsonify({
+            "response": marko.convert(responses.text)  # Use aggregated text 
+        })
         
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
