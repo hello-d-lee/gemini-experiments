@@ -29,6 +29,13 @@ model = GenerativeModel(model_name="gemini-pro-vision",
 GCS_BUCKET_NAME = 'gemini-images-uploaded'  
 storage_client = storage.Client()
 
+image_coke_regular_uri = "gs://gemini-images-uploaded/Selfie_India_7.png"
+image_coke_zero_uri = "gs://gemini-images-uploaded/Selfie_India_16.png"
+image_coke_diet_uri = "gs://gemini-images-uploaded/Selfie_David.JPG"
+image_coke_regular = Part.from_uri(image_coke_regular_uri, mime_type="image/png")
+image_coke_zero = Part.from_uri(image_coke_zero_uri, mime_type="image/png")
+image_coke_diet = Part.from_uri(image_coke_diet_uri, mime_type="image/jpeg")
+
 def upload_to_gcs(temp_file, original_filename):  # Keep the filename parameter 
     bucket = storage_client.bucket(GCS_BUCKET_NAME)
     
@@ -56,24 +63,15 @@ def upload_image():
         
         # Prepare parts for Gemini 
         image = Part.from_uri(gcs_uri, mime_type="image/jpeg")
-        print("created image part")
-        prompt = """You need to analyze an input image which will show a person with a can of coke. 
-            User will upload an image. Based on the image, identify the type of coke can (e.g. Coke Regular, Coke Zero and Diet Coke) and the emotion of the person in the picture. 
-            The response should take the form of a JSON object with the following structure: 
-            
-            {"product": "Diet Coke", "emotion": "Happiness"}
-            
-            You should only return the JSON object and nothing else."""
-        contents = [image, prompt]
-        responses = model.generate_content(contents, stream=True)  
+        responses = model.generate_content(
+        [f"""Look at the coke in this person's hand in this selfie {image_coke_regular}, The type of coke is Regular Coke which has a full red package and Coca-Cola logo in white color and usually comes with Original Taste text under it.""",
+         f"""Look at the coke in this person's hand in this selfie {image_coke_zero}, The type of coke is Coke Zero which is a full red package and Coca-Cola logo in black color and usually comes with Zero Sugar text under it.""",
+         f"""Look at the coke in this person's hand in this selfie {image_coke_diet}, The type of coke is Diet Coke which has a full silver package and Coca-Cola logo in red color and usually comes with Diet text above it.""",
+         f"""Extract the type of coke of three options of Regular Coke, Coke Zero, and Diet Coke as mentioned above and emotion from {image} and output them in JSON.""", image]
+        )
         print("generated model response") 
-        full_response_text = ''  # Accumulate full output
-
-        for chunk in responses:  # Iterate over generated chunks
-            full_response_text += chunk.text  
-
         return jsonify({
-            "response": marko.convert(full_response_text)  # Use aggregated text 
+            "response": marko.convert(responses.text)  # Use aggregated text 
         })
         
 if __name__ == '__main__':
