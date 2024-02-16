@@ -71,10 +71,8 @@ def upload_image():
          f"""Extract the type of coke of three options of Regular Coke, Coke Zero, and Diet Coke as mentioned above and emotion from {image} and output them in JSON.""", image]
         )
         print("generated model response") 
-        input_string = (responses.text)
-        json_string = input_string[9:-3]
 
-        return jsonify(json_string)
+        return jsonify(responses.text)
         
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
