@@ -41,6 +41,7 @@
     });
 
     // Initially disable the submit button
+       submitButton.style.display = 'none';
     fileInput.addEventListener('change', () => {
       if (fileInput.files.length > 0) {
         submitButton.style.display = 'block'; // Show if a file is selected
