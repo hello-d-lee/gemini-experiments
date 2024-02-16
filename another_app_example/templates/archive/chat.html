@@ -1,0 +1,33 @@
+<!doctype html>
+<body>
+    <h1>Image Upload & Coke Analysis</h1> 
+    <form action="/" method="POST" class="dropzone">
+      </form>
+
+    <div id="response-area"></div> 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.1/min/dropzone.min.js"></script>
+    <script>
+      var dropzone = new Dropzone("form.dropzone", { 
+          url: "/", 
+          maxFilesize: 2, 
+      });
+
+      dropzone.on("success", function(file, serverResponse) {
+        // Clear old response
+        document.getElementById("response-area").innerHTML = "";
+
+        // Send image data to '/upload_image' route via AJAX
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/upload_image', true);
+        xhr.onload = function() {
+          document.getElementById("response-area").innerHTML = JSON.parse(this.responseText).response; 
+        };
+
+        var formData = new FormData();
+        formData.append('file', file);
+        xhr.send(formData);  
+      });
+    </script>
+  </body>
+</html>
