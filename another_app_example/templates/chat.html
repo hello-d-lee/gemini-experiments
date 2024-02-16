@@ -31,6 +31,10 @@
     const fileInput = document.getElementById('fileInput');
     const fileNameDisplay = document.getElementById('fileNameDisplay');
 
+    // Set the default display text
+    fileNameDisplay.textContent = "No file selected"; 
+
+    // Set to the chosen file name
     fileInput.addEventListener('change', (event) => {
       const selectedFile = event.target.files[0];
       fileNameDisplay.textContent = selectedFile.name;
