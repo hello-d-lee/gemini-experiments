@@ -6,4 +6,10 @@ gcloud run deploy vision-coke-backend \
 --region=us-central1 \
 --no-allow-unauthenticated \
 --source . \
---set-env-vars=[BUCKET_NAME=gem-vison-cr-app-upload]
+--set-env-vars=BUCKET_NAME=gem-vison-cr-app-upload
+
+#Sample Post Command 
+
+cd ~/gemini-experiments/another_app_example/images
+
+curl -X POST -F "file=@./coke.jpg" https://vision-coke-backend-ztskssd4ra-uc.a.run.app/upload_image -H "Authorization: Bearer $(gcloud auth print-identity-token)" 
