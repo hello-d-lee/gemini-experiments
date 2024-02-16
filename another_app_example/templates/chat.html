@@ -74,10 +74,11 @@
             }
 
             const responseData = await response.json();
+            console.log(responseData);
             displayCokeData(responseData);
 
         } catch (error) {
-            cokeDataDiv.textContent = 'Error fetching Coke data'; 
+            resultsDiv.textContent = 'Error fetching Coke data'; 
             console.error('Error:', error);
         }
     });
