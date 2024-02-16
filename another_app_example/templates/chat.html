@@ -12,8 +12,11 @@
     <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
     <h6>Drag & Drop File Here</h6>
     <span>OR</span>
-    <button>Browse File</button>
-    <input type="file" hidden>
+    
+    <form method="post" enctype="multipart/form-data" action="https://vision-coke-backend-ztskssd4ra-uc.a.run.app/upload_image">
+      <input type="file" name="myFile" id="fileInput">
+      <button type="submit">Browse File</button>
+    </form>
   </div>
 
 </div>
