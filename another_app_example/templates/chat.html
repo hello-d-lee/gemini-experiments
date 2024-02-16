@@ -54,9 +54,7 @@
 
 
     const form = document.querySelector('form');
-    const resultsDiv = document.createElement('div'); // Create a container for results
-    resultsDiv.id = 'results'; 
-    document.body.appendChild(resultsDiv); // Add the container to the page
+    const resultsDiv = document.getElementById('results'); 
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -73,7 +71,7 @@
         } else {
             resultsDiv.textContent = 'An error occurred while uploading the image.';
         }
-    });
+        });
 </script>
 
 
