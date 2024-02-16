@@ -20,7 +20,7 @@
     </form>
   </div>
 
-  <div id="results"></div>
+<div id="results"></div>
 
 </div>
 
@@ -54,7 +54,7 @@
       }
     });
 
-
+    // Get results and Dsipaly them
     const form = document.querySelector('form');
     const resultsDiv = document.getElementById('results'); 
 
@@ -68,12 +68,22 @@
         });
 
         if (response.ok) {
-            const responseJSON = await response.json();
-            resultsDiv.textContent = responseJSON; // Display the result
+            const responseText = await response.text();
+            const responseJSON = JSON.parse(responseText); 
+            displayResults(responseJSON); 
         } else {
             resultsDiv.textContent = 'An error occurred while uploading the image.';
         }
-        });
+    });
+
+    function displayResults(data) {
+        resultsDiv.innerHTML = ''; 
+        const pre = document.createElement('pre');
+        pre.textContent = JSON.stringify(data, null, 2); 
+        resultsDiv.appendChild(pre);
+    }
+
+
 </script>
 
 
