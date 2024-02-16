@@ -72,7 +72,6 @@ def upload_image():
         )
         print("generated model response") 
         print(responses.text)
-        print(formatted)
         # print(responses)
         # hardcoded_response = {
         # "coke_type": "Diet Coke",
