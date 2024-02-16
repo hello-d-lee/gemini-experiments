@@ -54,44 +54,27 @@
       }
     });
 
-    // Get results and Dsipaly them
-
-    const form = document.querySelector('form'); // Assuming you have a form
+    const form = document.querySelector('form');
     const resultsDiv = document.getElementById('results'); 
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        try {
-            const formData = new FormData(form);
-            const response = await fetch(form.action, {
-                method: 'POST',
-                body: formData
-            });
+        const formData = new FormData(form);
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData
+        });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const responseData = await response.json();
+        if (response.ok) {
+            const responseText = await response.text();
             console.log(responseData);
-            displayCokeData(responseData);
-
-        } catch (error) {
-            resultsDiv.textContent = 'Error fetching Coke data'; 
-            console.error('Error:', error);
+            resultsDiv.textContent = responseText; // Display the results
+        } else {
+            resultsDiv.textContent = 'An error occurred while uploading the image.';
         }
     });
-
-    function displayCokeData(data) {
-      console.log("Before update:", resultsDiv.innerHTML);
-       resultsDiv.innerHTML = `
-            <p>Coke Type: ${data.coke_type}</p>
-            <p>Emotion: ${data.emotion}</p>
-        `;
-      console.log("After update:", resultsDiv.innerHTML);  // See the new content
-    }
-
+    
 </script>
 
 </body>
