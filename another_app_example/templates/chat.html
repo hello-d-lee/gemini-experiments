@@ -75,7 +75,12 @@
 
             const responseData = await response.json();
             console.log(responseData);
-            displayCokeData(responseData);
+            tempDiv.innerHTML = responseData.response; // Assuming 'responseData' holds your whole response
+            const preElement = tempDiv.querySelector('pre'); 
+            const codeElement = preElement.querySelector('code'); 
+            const innerJSONString = codeElement.textContent;
+            const parsedData = JSON.parse(innerJSONString); 
+            displayCokeData(parsedData);
 
         } catch (error) {
             resultsDiv.textContent = 'Error fetching Coke data'; 
