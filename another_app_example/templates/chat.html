@@ -84,10 +84,12 @@
     });
 
     function displayCokeData(data) {
+      console.log("Before update:", resultsDiv.innerHTML);
        resultsDiv.innerHTML = `
             <p>Coke Type: ${data.coke_type}</p>
             <p>Emotion: ${data.emotion}</p>
         `;
+      console.log("After update:", resultsDiv.innerHTML);  // See the new content
     }
 
     // const form = document.querySelector('form');
