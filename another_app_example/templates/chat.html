@@ -2,7 +2,21 @@
 <html>
 <head>
   <title>Image Upload Test</title>
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='chat.css') }}"> 
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='chat.css') }}">
+  <script>
+    javascript
+    const fileInput = document.getElementById('fileInput');
+    const selectedFileNameDisplay = document.getElementById('selectedFileName');
+
+    fileInput.addEventListener('change', (event) => {
+      const selectedFile = event.target.files[0]; // Get the selected file
+      if (selectedFile) {
+        selectedFileNameDisplay.textContent = selectedFile.name;  // Display name
+      } else {
+        selectedFileNameDisplay.textContent = ''; // Clear when no file selected
+      }
+    });
+ </script>
 </head>
 <body>
 
@@ -14,7 +28,9 @@
 
     <form method="post" enctype="multipart/form-data" action="https://vision-coke-backend-ztskssd4ra-uc.a.run.app/upload_image">
       <input type="file" name="file" id="fileInput" style="display: none;">
-      <button type="submit">Browse File</button>
+      <span id="selectedFileName"></span>
+      <br/>
+      <button type="submit">How to Do I Feel About My Coke</button>
     </form>
   </div>
 
