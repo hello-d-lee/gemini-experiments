@@ -68,7 +68,7 @@
 
         if (response.ok) {
             const responseText = await response.text();
-            console.log(responseData);
+            console.log(responseText);
             resultsDiv.textContent = responseText; // Display the results
         } else {
             resultsDiv.textContent = 'An error occurred while uploading the image.';
