@@ -13,3 +13,9 @@ gcloud run deploy vision-coke-backend \
 cd ~/gemini-experiments/another_app_example/images
 
 curl -X POST -F "file=@./coke.jpg" https://vision-coke-backend-ztskssd4ra-uc.a.run.app/upload_image -H "Authorization: Bearer $(gcloud auth print-identity-token)" 
+
+curl -X POST -F "file=@./Selfie_David.JPG" https://vision-coke-backend-ztskssd4ra-uc.a.run.app/upload_image -H "Authorization: Bearer $(gcloud auth print-identity-token)" 
+
+
+
+
