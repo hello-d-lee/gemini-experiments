@@ -45,9 +45,9 @@
 
     fileInput.addEventListener('change', () => {
       if (fileInput.files.length > 0) {
-        submitButton.disabled = false; // Enable if a file is selected
+        submitButton.style.display = 'block'; // Show if a file is selected
       } else {
-        submitButton.disabled = true;  // Disable if no file is selected
+        submitButton.style.display = 'none';  // Hide if no file is selected
       }
     });
 </script>
