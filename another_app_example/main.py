@@ -71,6 +71,8 @@ def upload_image():
          f"""Extract the type of coke of three options of Regular Coke, Coke Zero, and Diet Coke as mentioned above and emotion from {image} and output them in JSON.""", image]
         )
         print("generated model response") 
+        print(responses) 
+        print (responses.text)
         return jsonify({
             "response": marko.convert(responses.text)  # Use aggregated text 
         })
