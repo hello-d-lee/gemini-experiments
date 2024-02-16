@@ -16,11 +16,13 @@
     <form method="post" enctype="multipart/form-data" action="https://vision-coke-backend-ztskssd4ra-uc.a.run.app/upload_image">
       <input type="file" name="file" id="fileInput" style="display: none;">
       <br/>
-      <button type="submit" id="submitButton">How to Do I Feel About My Coke</button>
+      <button type="submit" id="submitButton"><b>How to Do I Feel About My Coke</b></button>
     </form>
   </div>
 
 </div>
+
+<div id="results"></div>
 
   <footer>
     <p>Powered by Gemini Vison Pro</p>
@@ -48,6 +50,29 @@
       } else {
         submitButton.style.display = 'none';  // Hide if no file is selected
       }
+    });
+
+
+    const form = document.querySelector('form');
+    const resultsDiv = document.createElement('div'); // Create a container for results
+    resultsDiv.id = 'results'; 
+    document.body.appendChild(resultsDiv); // Add the container to the page
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            const responseText = await response.text();
+            resultsDiv.textContent = responseText; // Display the result
+        } else {
+            resultsDiv.textContent = 'An error occurred while uploading the image.';
+        }
     });
 </script>
 
