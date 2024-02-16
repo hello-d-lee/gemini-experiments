@@ -72,7 +72,7 @@ def upload_image():
         )
         print("generated model response") 
         input_string = (responses.text)
-        json_string = input_string[8:-3]
+        json_string = input_string[3:-3]
 
         return jsonify(json_string)
         
