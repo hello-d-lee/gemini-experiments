@@ -1,31 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Image Upload Test</title>
+  <title>Coca Cola Selfie Analyzer</title>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='chat.css') }}">
 </head>
 <body>
 
  <div class="content-wrapper">
-  <h2>Image Upload and Coke Analysis</h2>
+  <h2>Coca Cola Selfie Analyzer</h2>
   <div class="drag-image">
     <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
-    <h6><label for="fileInput" class="custom-file-button">Choose your Coke Selfie</label></h6>
+    <h6><label for="fileInput" class="custom-file-button">Choose your Selfie</label></h6>
     <span id="fileNameDisplay"></span> 
 
     <form method="post" enctype="multipart/form-data" action="https://vision-coke-backend-ztskssd4ra-uc.a.run.app/upload_image">
       <input type="file" name="file" id="fileInput" style="display: none;">
       <br/>
-      <button type="submit" id="submitButton"><b>How to Do I Feel About My Coke</b></button>
+      <button type="submit" id="submitButton"><b>How to Do I Feel About My Coca Cola?</b></button>
     </form>
   </div>
 
+  <div id="results"></div>
+
 </div>
 
-<div id="results"></div>
+
 
   <footer>
-    <p>Powered by Gemini Vison Pro</p>
+    <p>Powered by Gemini Vision Pro</p>
   </footer>
 
 
