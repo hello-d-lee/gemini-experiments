@@ -10,11 +10,10 @@
   <h2>Image Upload and Coke Analysis</h2>
   <div class="drag-image">
     <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
-    <h6>Drag & Drop File Here</h6>
-    <span>OR</span>
-    
+    <h6><label for="fileInput" class="custom-file-button">Choose your Coke Selfie</label></h6>
+
     <form method="post" enctype="multipart/form-data" action="https://vision-coke-backend-ztskssd4ra-uc.a.run.app/upload_image">
-      <input type="file" name="file" id="fileInput">
+      <input type="file" name="file" id="fileInput" style="display: none;">
       <button type="submit">Browse File</button>
     </form>
   </div>
