@@ -75,7 +75,6 @@
 
             const responseData = await response.json();
             console.log(responseData);
-            const imgURL = `/images/${selectedFile.name}`; 
             displayCokeData(responseData,imgURL);
 
         } catch (error) {
@@ -87,7 +86,6 @@
     function displayCokeData(data,imageUrl) {
       console.log("Before update:", resultsDiv.innerHTML);
        resultsDiv.innerHTML = `
-            <p> <img src="$(imageUrl)" style="width:176px;height:300px"></p>
             <p>${data.response}</p>
         `;
       console.log("After update:", resultsDiv.innerHTML);  // See the new content
