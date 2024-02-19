@@ -75,7 +75,7 @@
 
             const responseData = await response.json();
             console.log(responseData);
-            displayCokeData(responseData,imgURL);
+            displayCokeData(responseData);
 
         } catch (error) {
             resultsDiv.textContent = 'Error fetching Coke data'; 
