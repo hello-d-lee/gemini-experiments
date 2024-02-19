@@ -65,10 +65,10 @@ def upload_image():
         # Prepare parts for Gemini 
         image = Part.from_uri(gcs_uri, mime_type="image/jpeg")
         responses = model.generate_content(
-        [f"""Look at the coke in this person's hand in this selfie {image_coke_regular}, The type of coke is Regular Coke which has a full red package and Coca-Cola logo in white color and usually comes with Original Taste text under it.""",
-         f"""Look at the coke in this person's hand in this selfie {image_coke_zero}, The type of coke is Coke Zero which is a full red package and Coca-Cola logo in black color and usually comes with Zero Sugar text under it.""",
-         f"""Look at the coke in this person's hand in this selfie {image_coke_diet}, The type of coke is Diet Coke which has a full silver package and Coca-Cola logo in red color and usually comes with Diet text above it.""",
-         f"""Extract the type of coke of three options of Regular Coke, Coke Zero, and Diet Coke as mentioned above and emotion from {image} and output them in JSON.""", image]
+        [f"""Look at the coke in this person's hand in this selfie:{image_coke_regular}, The type of coke is Regular Coke which has a full red exterior can and Coca-Cola logo in white color and usually comes with Original Taste text under it.""",
+         f"""Look at the coke in this person's hand in this selfie:{image_coke_zero}, The type of coke is Coke Zero which is a full red exterior can and Coca-Cola logo in black color and usually comes with Zero Sugar text under it.""",
+         f"""Look at the coke in this person's hand in this selfie:{image_coke_diet}, The type of coke is Diet Coke which has a full silver exterior can and Coca-Cola logo in red color and usually comes with Diet text above it.""",
+         f"""There is only ONE type of coke in the image. Identify the coke type from: Regular Coke, Coke Zero, or Diet Coke and the person's emotion shown in the image: {image}. Output your response in JSON."""]
         )
         print("generated model response") 
 
