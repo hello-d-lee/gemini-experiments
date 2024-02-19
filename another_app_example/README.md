@@ -21,4 +21,5 @@ curl -X POST -F "file=@./Selfie_David.JPG" https://vision-coke-backend-ztskssd4r
 pip install -r requirements.txt 
 export BUCKET_NAME="gem-vison-cr-app-upload"
 export FLASK_APP="main"
+gcloud auth print-identity-token
 
