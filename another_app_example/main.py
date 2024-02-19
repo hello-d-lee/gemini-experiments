@@ -26,48 +26,54 @@ config = {
 model = GenerativeModel(model_name="gemini-pro-vision",
                               generation_config=config)
 
-GCS_BUCKET_NAME = 'gemini-images-uploaded'  
+GCS_BUCKET_NAME = os.environ['BUCKET_NAME'] 
+
 storage_client = storage.Client()
 
-def upload_to_gcs(file, filename):
+image_coke_regular_uri = "gs://{GCS_BUCKET_NAME}/Selfie_India_7.png"
+image_coke_zero_uri = "gs://{GCS_BUCKET_NAME}/Selfie_India_16.png"
+image_coke_diet_uri = "gs://{GCS_BUCKET_NAME}/Selfie_David.JPG"
+image_coke_regular = Part.from_uri(image_coke_regular_uri, mime_type="image/png")
+image_coke_zero = Part.from_uri(image_coke_zero_uri, mime_type="image/png")
+image_coke_diet = Part.from_uri(image_coke_diet_uri, mime_type="image/jpeg")
+
+def upload_to_gcs(temp_file, original_filename):  # Keep the filename parameter 
     bucket = storage_client.bucket(GCS_BUCKET_NAME)
-    blob = bucket.blob(filename)  
-    blob.upload_from_filename(file.filename)  # Work directly from 'file'
+    
+    blob = bucket.blob(original_filename)
+    blob.chunk_size = 1024 * 1024
+    blob.upload_from_file(temp_file)
+    
+    print(f"Image uploaded successfully to gs://{GCS_BUCKET_NAME}/{original_filename}")
 
-# @app.route('/')
-# def index():
-#     return render_template('chat.html')
+@app.route('/', methods=['GET','POST'])
+def index():
+    return render_template('chat.html')
 
-@app.route('/upload_image', methods=['POST'])
+@app.route('/upload_image', methods=['GET','POST'])
 def upload_image():           
         if 'file' not in request.files:
             return('No file part')
-        
+    
         file = request.files['file']
-        file_bytes = file.read() 
 
-        # Upload to GCS using original filename
-        upload_to_gcs(file, file.filename)  
-        print("uploaded file to GCS")
+        upload_to_gcs(file, file.filename)
 
         # Construct GCS URI (using the original filename now)
-        gcs_uri = "gs://gemini-images-uploaded/coke.jpeg"
-
+        gcs_uri = f"gs://{GCS_BUCKET_NAME}/{file.filename}"
+        
         # Prepare parts for Gemini 
         image = Part.from_uri(gcs_uri, mime_type="image/jpeg")
-        print("created image part")
-        prompt = """You need to analyze an input image which will show a person with a can of coke. 
-            User will upload an image. Based on the image, identify the type of coke can (e.g. Coke Regular, Coke Zero and Diet Coke) and the emotion of the person in the picture. 
-            The response should take the form of a JSON object with the following structure: 
-            
-            {"product": "Diet Coke", "emotion": "Happiness"}
-            
-            You should only return the JSON object and nothing else."""
-        contents = [image, prompt]
-        responses = model.generate_content(contents, stream=True)
-        print("generated model response")
+        responses = model.generate_content(
+        [f"""Look at the coke in this person's hand in this selfie:{image_coke_regular}, The type of coke is Regular Coke which has a full red exterior can and Coca-Cola logo in white color and usually comes with Original Taste text under it.""",
+         f"""Look at the coke in this person's hand in this selfie:{image_coke_zero}, The type of coke is Coke Zero which is a full red exterior can and Coca-Cola logo in black color and usually comes with Zero Sugar text under it.""",
+         f"""Look at the coke in this person's hand in this selfie:{image_coke_diet}, The type of coke is Diet Coke which has a full silver exterior can and Coca-Cola logo in red color and usually comes with Diet text above it.""",
+         f"""There is only ONE type of coke in the image. Identify the coke type from: Regular Coke, Coke Zero, or Diet Coke and the person's emotion shown in the image: {image}. Output your response in JSON."""]
+        )
+        print("generated model response") 
+
         return jsonify({
-            "response": marko.convert(responses.text)
+            "response": marko.convert(responses.text)  # Use aggregated text 
         })
         
 if __name__ == '__main__':
